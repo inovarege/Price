@@ -33,7 +33,7 @@ lucide.createIcons();
 const expenseCategories = [
   { id: 'terceiros', name: 'Serviços Terceirizados', items: [{ desc: '', qty: 1, val: 0 }], isOpen: false },
   { id: 'logistica', name: 'Despesas Logísticas', items: [{ desc: '', qty: 1, val: 0 }], isOpen: false },
-  { id: 'internas', name: 'Horas Internas Ambiens', items: [{ desc: '', qty: 1, val: 0 }], isOpen: false },
+  { id: 'internas', name: 'Horas Internas Ambiens', items: [{ desc: 'Custo hora - Ambiens', qty: 1, val: 92 }], isOpen: false },
   { id: 'outras', name: 'Outras Despesas', items: [{ desc: '', qty: 1, val: 0 }], isOpen: false }
 ];
 
@@ -80,7 +80,7 @@ function renderExpenses() {
           <div style="display: grid; grid-template-columns: 1fr 100px 160px 160px 34px; gap: 1rem; margin-bottom: 0.5rem; font-weight: 700; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">
              <div style="text-align: left;">Descrição</div>
              <div style="text-align: center;">Qtd</div>
-             <div style="text-align: center;">V. Unit</div>
+             <div style="text-align: center;">${cat.id === 'internas' ? 'Custo Hora' : 'V. Unit'}</div>
              <div style="text-align: right; padding-right: 1.5rem;">Total</div>
              <div></div>
           </div>
@@ -183,7 +183,15 @@ function calculatePricing() {
     suggested = appState.directExpenses / denom;
   }
   appState.suggestedPrice = suggested;
-  document.getElementById('suggested-price').textContent = formatCurrency(suggested);
+  const suggestedEl = document.getElementById('suggested-price');
+  suggestedEl.textContent = formatCurrency(suggested);
+  
+  // Ajuste de tamanho de fonte para valores > 1mi
+  if (suggested >= 1000000) {
+    suggestedEl.style.setProperty('font-size', '1.4rem', 'important');
+  } else {
+    suggestedEl.style.setProperty('font-size', '2rem', 'important');
+  }
   
   // Detalhes Sugerido
   const sugVarTotal = suggested * variableRateTotal;
@@ -192,10 +200,10 @@ function calculatePricing() {
   const formatPercentStr = (value) => `(${new Intl.NumberFormat('pt-BR', { style: 'percent', minimumFractionDigits: 2 }).format(value)})`; 
 
   const renderLine = (label, val, pct, isBold=false, isSub=false) => `
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; ${isBold ? 'font-weight: 700;' : ''} ${isSub ? 'padding-left: 1.5rem; opacity: 0.75; font-size: 0.85rem;' : 'font-size: 0.95rem;'}">
-       <span style="flex: 1;">${label}</span>
-       <span style="text-align: right; width: 90px; margin-right: 0.5rem;">${formatCurrency(val)}</span>
-       <span style="text-align: right; width: 75px;">${formatPercentStr(pct)}</span>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; ${isBold ? 'font-weight: 700;' : ''} ${isSub ? 'padding-left: 1rem; opacity: 0.75; font-size: 0.8rem;' : 'font-size: 0.9rem;'}">
+       <span style="flex: 1; padding-right: 0.5rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${label}</span>
+       <span style="text-align: right; white-space: nowrap;">${formatCurrency(val)}</span>
+       <span style="text-align: right; width: 65px; white-space: nowrap; margin-left: 0.5rem;">${formatPercentStr(pct)}</span>
     </div>
   `;
 
@@ -216,6 +224,7 @@ function calculatePricing() {
     ${renderLine(`Impostos (${appState.taxRate}%)`, suggested * (appState.taxRate/100), appState.taxRate/100, false, true)}
     ${renderLine(`Financeiras (${appState.finRate}%)`, suggested * (appState.finRate/100), appState.finRate/100, false, true)}
     ${renderLine(`Comissões (${appState.comRate}%)`, suggested * (appState.comRate/100), appState.comRate/100, false, true)}
+    ${renderLine(`Imprevistos (${appState.contRate}%)`, suggested * (appState.contRate/100), appState.contRate/100, false, true)}
 
     <div style="border-top: 1px solid rgba(255,255,255,0.1); margin-top: 1.5rem; padding-top: 1.5rem;">
       <div style="display: flex; justify-content: space-between; align-items: center; color: var(--color-green-primary); font-weight: 800; font-size: 1.25rem; text-transform: uppercase;">
@@ -230,7 +239,15 @@ function calculatePricing() {
 
   // Fechado
   let closed = appState.closedPrice;
-  document.getElementById('closed-price-display').textContent = formatCurrency(closed);
+  const closedEl = document.getElementById('closed-price-display');
+  closedEl.textContent = formatCurrency(closed);
+  
+  // Ajuste de tamanho de fonte para valores > 1mi
+  if (closed >= 1000000) {
+    closedEl.style.setProperty('font-size', '1.4rem', 'important');
+  } else {
+    closedEl.style.setProperty('font-size', '2rem', 'important');
+  }
   
   if (closed > 0) {
     document.getElementById('card-closed').classList.remove('hidden');
@@ -267,6 +284,7 @@ function calculatePricing() {
       ${renderLine(`Impostos (${appState.taxRate}%)`, closed * (appState.taxRate/100), appState.taxRate/100, false, true)}
       ${renderLine(`Financeiras (${appState.finRate}%)`, closed * (appState.finRate/100), appState.finRate/100, false, true)}
       ${renderLine(`Comissões (${appState.comRate}%)`, closed * (appState.comRate/100), appState.comRate/100, false, true)}
+      ${renderLine(`Imprevistos (${appState.contRate}%)`, closed * (appState.contRate/100), appState.contRate/100, false, true)}
 
       <div style="border-top: 1px solid currentColor; margin-top: 1.5rem; padding-top: 1.5rem; opacity: 0.9;">
         <div style="display: flex; justify-content: space-between; align-items: center; font-weight: 800; font-size: 1.25rem; text-transform: uppercase;">
@@ -296,14 +314,22 @@ document.getElementById('btn-export-pdf').addEventListener('click', async () => 
    loading.classList.remove('hidden');
 
    try {
-     const projCodeEl = document.getElementById('proj-code').value.trim();
-     const projNameEl = document.getElementById('proj-name').value.trim();
-     const projDateEl = document.getElementById('proj-date').value;
+     const projCode = document.getElementById('proj-code').value.trim();
+     const projName = document.getElementById('proj-name').value.trim();
+     const projDate = document.getElementById('proj-date').value;
      
-     // Filename Logic : Código da Proposta - Nome do Projeto - data
-     // Data clean up without special chars
-     const cleanDate = projDateEl ? projDateEl.replace(/[^0-9]/g, '') : '';
-     const fileName = `${projCodeEl || 'SemCodigo'} - ${projNameEl || 'Projeto'} - ${cleanDate || 'SemData'}`.replace(/[/\\?%*:|"<>\\]/g, '-');
+     // Formatar data para DD-MM-YYYY
+     let formattedDate = '';
+     if (projDate) {
+       const [y, m, d] = projDate.split('-');
+       formattedDate = `${d}-${m}-${y}`;
+     } else {
+       formattedDate = 'SemData';
+     }
+
+     // Nome do Arquivo: Código - Nome - Data
+     const baseFileName = `${projCode || 'SemCodigo'} - ${projName || 'Projeto'} - ${formattedDate}`;
+     const fileName = baseFileName.replace(/[/\\?%*:|"<>\\]/g, '-');
 
      // We will build the DOM structure for PDF
      const pdfContainer = document.getElementById('pdf-container');
@@ -323,7 +349,7 @@ document.getElementById('btn-export-pdf').addEventListener('click', async () => 
               
               <div class="pdf-info-group">
                  <div class="pdf-info-label">Nome do Projeto</div>
-                 <div class="pdf-info-value">${projNameEl || '-'}</div>
+                 <div class="pdf-info-value">${projName || '-'}</div>
               </div>
               <div class="pdf-info-group">
                  <div class="pdf-info-label">Cliente</div>
@@ -331,11 +357,11 @@ document.getElementById('btn-export-pdf').addEventListener('click', async () => 
               </div>
               <div class="pdf-info-group">
                  <div class="pdf-info-label">Código da Proposta</div>
-                 <div class="pdf-info-value">${projCodeEl || '-'}</div>
+                 <div class="pdf-info-value">${projCode || '-'}</div>
               </div>
               <div class="pdf-info-group">
                  <div class="pdf-info-label">Data</div>
-                 <div class="pdf-info-value">${projDateEl || '-'}</div>
+                 <div class="pdf-info-value">${formattedDate}</div>
               </div>
               <div class="pdf-info-group" style="margin-top: 3rem;">
                  <div class="pdf-info-label">Descrição</div>
@@ -346,74 +372,127 @@ document.getElementById('btn-export-pdf').addEventListener('click', async () => 
       </div>
      `;
 
-     // Pg 2 - Detalhamento Financeiro (Preço Fechado + Preço Sugerido lado a lado ou topo/baixo)
+     // Pg 2 - Detalhamento Financeiro
+     const getPriceFontSize = (price) => (price >= 1000000 ? '1.8rem' : '2.2rem');
+     
      const page2HTML = `
       <div class="pdf-page" id="pdf-page-2">
-         <h2 style="color: var(--color-green-dark); font-size: 2rem; border-bottom: 2px solid var(--color-green-primary); padding-bottom: 0.5rem; margin-bottom: 2rem;">Detalhamento Financeiro</h2>
+         <style>
+            #pdf-page-2 span { white-space: nowrap !important; }
+            #pdf-page-2 .pdf-details-row span:first-child { 
+               white-space: normal !important; 
+               text-overflow: clip !important; 
+               overflow: visible !important; 
+               max-width: 160px;
+            }
+         </style>
+         <h2 style="color: #5D812C; font-size: 1.8rem; border-bottom: 2px solid #68B700; padding-bottom: 0.5rem; margin-bottom: 1.5rem;">Detalhamento Financeiro</h2>
          
-         <div style="display: flex; gap: 2rem;">
+         <div style="display: flex; gap: 1rem;">
             <!-- Fechado -->
-            <div style="flex: 1; padding: 1.5rem; border: 2px solid var(--color-accent-yellow); border-radius: 12px; background: #fffdf5;">
-               <h3 style="color: var(--color-blue-dark); text-align: center; margin-bottom: 0.5rem;">Cenário Fechado</h3>
-               <div style="text-align: center; font-size: 2.5rem; font-weight: 800; color: var(--color-blue-dark); margin-bottom: 2rem;">${formatCurrency(cPrice)}</div>
+            <div style="flex: 1; padding: 1.2rem; border: 2px solid #F2DE2B; border-radius: 12px; background: #fffdf5; display: flex; flex-direction: column;">
+               <h3 style="color: #274C77; text-align: center; margin-bottom: 0.5rem; font-size: 1rem;">Cenário Fechado</h3>
+               <div style="text-align: center; font-size: ${getPriceFontSize(cPrice)}; font-weight: 800; color: #274C77; margin-bottom: 1.5rem; letter-spacing: -0.02em;">${formatCurrency(cPrice)}</div>
                
-               ${document.getElementById('closed-details').innerHTML}
+               <div class="pdf-details-row" style="font-size: 0.8rem;">
+                  ${document.getElementById('closed-details').innerHTML || '<p style="text-align:center; color:#888;">Nenhum dado informado</p>'}
+               </div>
             </div>
             
             <!-- Sugerido -->
-            <div style="flex: 1; padding: 1.5rem; border: 2px solid var(--color-blue-medium); border-radius: 12px; background: #f0f7f9;">
-               <h3 style="color: var(--color-blue-dark); text-align: center; margin-bottom: 0.5rem;">Cenário Sugerido</h3>
-               <div style="text-align: center; font-size: 2.5rem; font-weight: 800; color: var(--color-blue-dark); margin-bottom: 2rem;">${formatCurrency(sPrice)}</div>
+            <div style="flex: 1; padding: 1.2rem; border: 2px solid #6096BA; border-radius: 12px; background: #f0f7f9; display: flex; flex-direction: column;">
+               <h3 style="color: #274C77; text-align: center; margin-bottom: 0.5rem; font-size: 1rem;">Cenário Sugerido</h3>
+               <div style="text-align: center; font-size: ${getPriceFontSize(sPrice)}; font-weight: 800; color: #274C77; margin-bottom: 1.5rem; letter-spacing: -0.02em;">${formatCurrency(sPrice)}</div>
                
-               ${document.getElementById('suggested-details').innerHTML}
+               <div class="pdf-details-row" style="font-size: 0.8rem;">
+                  ${document.getElementById('suggested-details').innerHTML}
+               </div>
             </div>
          </div>
          
-         <h3 style="margin-top: 3rem; color: var(--color-blue-dark);">Base de Despesas Diretas Reais</h3>
-         <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
+         <h3 style="margin-top: 2rem; color: #274C77; font-size: 1.2rem;">Base de Despesas Diretas Reais</h3>
+         <table style="width: 100%; border-collapse: collapse; margin-top: 0.8rem; font-size: 0.85rem;">
             <thead>
-               <tr style="background: var(--color-green-primary); color: white;">
-                  <th style="padding: 0.75rem; text-align: left;">Categoria</th>
-                  <th style="padding: 0.75rem; text-align: right;">Total R$</th>
+               <tr style="background: #68B700; color: white;">
+                  <th style="padding: 0.6rem; text-align: left;">Categoria</th>
+                  <th style="padding: 0.6rem; text-align: right;">Total R$</th>
                </tr>
             </thead>
             <tbody>
                ${expenseCategories.map(cat => {
                  let t = cat.items.reduce((acc, a) => acc + (a.qty * a.val), 0);
-                 return `<tr style="border-bottom: 1px solid #ddd;">
-                    <td style="padding: 0.75rem;">${cat.name}</td>
-                    <td style="padding: 0.75rem; text-align: right; font-weight: 600;">${formatCurrency(t)}</td>
+                 return `<tr style="border-bottom: 1px solid #eee;">
+                    <td style="padding: 0.6rem;">${cat.name}</td>
+                    <td style="padding: 0.6rem; text-align: right; font-weight: 600;">${formatCurrency(t)}</td>
                  </tr>`;
                }).join('')}
-               <tr style="background: #f1f5f9;">
-                  <td style="padding: 0.75rem; font-weight: bold;">TOTAL</td>
-                  <td style="padding: 0.75rem; text-align: right; font-weight: bold;">${formatCurrency(dExp)}</td>
+               <tr style="background: #f8fafc; border-top: 2px solid #68B700;">
+                  <td style="padding: 0.6rem; font-weight: bold; color: #5D812C;">TOTAL DESPESAS DIRETAS</td>
+                  <td style="padding: 0.6rem; text-align: right; font-weight: 800; color: #5D812C; font-size: 1rem;">${formatCurrency(dExp)}</td>
                </tr>
             </tbody>
          </table>
       </div>
      `;
 
-     // Pg 3 - Análise Comparativa
+     // Pg 3 - Detalhamento de Itens
+     const page3HTML = `
+      <div class="pdf-page" id="pdf-page-3">
+         <h2 style="color: #5D812C; font-size: 1.8rem; border-bottom: 2px solid #68B700; padding-bottom: 0.5rem; margin-bottom: 1.5rem;">Detalhamento de Itens</h2>
+         <p style="margin-bottom: 1.5rem; color: #64748B;">Listagem completa de todos os custos diretos previstos para o projeto.</p>
+         
+         <table style="width: 100%; border-collapse: collapse; font-size: 0.8rem;">
+            <thead>
+               <tr style="background: #274C77; color: white;">
+                  <th style="padding: 0.6rem; text-align: left;">Item / Descrição</th>
+                  <th style="padding: 0.6rem; text-align: center; width: 60px;">Qtd</th>
+                  <th style="padding: 0.6rem; text-align: right; width: 120px;">V. Unitário</th>
+                  <th style="padding: 0.6rem; text-align: right; width: 120px;">Total</th>
+               </tr>
+            </thead>
+            <tbody>
+               ${expenseCategories.map(cat => `
+                  <tr style="background: rgba(104, 183, 0, 0.1); font-weight: bold;">
+                     <td colspan="4" style="padding: 0.6rem; color: #5D812C; border-top: 1px solid #ccc;">${cat.name}</td>
+                  </tr>
+                  ${cat.items.map(item => `
+                     <tr style="border-bottom: 1px solid #eee;">
+                        <td style="padding: 0.5rem; padding-left: 1.5rem;">${item.desc || '(Sem descrição)'}</td>
+                        <td style="padding: 0.5rem; text-align: center;">${item.qty}</td>
+                        <td style="padding: 0.5rem; text-align: right;">${formatCurrency(item.val)}</td>
+                        <td style="padding: 0.5rem; text-align: right; font-weight: 600;">${formatCurrency(item.qty * item.val)}</td>
+                     </tr>
+                  `).join('')}
+               `).join('')}
+               <tr style="background: #f8fafc; border-top: 2px solid #68B700;">
+                  <td colspan="3" style="padding: 0.8rem; font-weight: bold; color: #5D812C; text-align: right;">TOTAL GERAL DE DESPESAS DIRETAS</td>
+                  <td style="padding: 0.8rem; text-align: right; font-weight: 800; color: #5D812C; font-size: 1.1rem;">${formatCurrency(dExp)}</td>
+               </tr>
+            </tbody>
+         </table>
+      </div>
+     `;
+
+     // Pg 4 - Análise Comparativa
      let cLucro = cPrice - dExp - (cPrice * (rates/100));
      let cMargin = cPrice > 0 ? (cLucro / cPrice) * 100 : 0;
      let marginCor = cMargin <= 5 ? '#DC2626' : (cMargin <= 12 ? '#CA8A04' : '#16A34A');
      
-     const page3HTML = `
-      <div class="pdf-page" id="pdf-page-3">
-         <h2 style="color: var(--color-green-dark); font-size: 2rem; border-bottom: 2px solid var(--color-green-primary); padding-bottom: 0.5rem; margin-bottom: 2rem;">Análise Comparativa</h2>
+     const page4HTML = `
+      <div class="pdf-page" id="pdf-page-4">
+         <h2 style="color: #5D812C; font-size: 2rem; border-bottom: 2px solid #68B700; padding-bottom: 0.5rem; margin-bottom: 2rem;">Análise Comparativa</h2>
          
          <div style="padding: 2rem; border-radius: 12px; background: #f8fafc; border: 1px solid #e2e8f0;">
-            <p style="font-size: 1.25rem; line-height: 1.8; color: var(--text-main);">
+            <p style="font-size: 1.25rem; line-height: 1.8; color: #2C3E50;">
                A proposta apresenta uma margem de lucro sugerida inicial de <strong>${appState.profitMargin}%</strong> gerando um ticket ideal de <strong>${formatCurrency(sPrice)}</strong>.
             </p>
-            <p style="font-size: 1.25rem; line-height: 1.8; color: var(--text-main); margin-top: 1.5rem;">
+            <p style="font-size: 1.25rem; line-height: 1.8; color: #2C3E50; margin-top: 1.5rem;">
                Contudo, o valor fechado estipulado é de <strong>${formatCurrency(cPrice)}</strong>. 
                Ao abater as incidências das taxas variáveis (${rates.toFixed(2)}%) e despesas diretas (${formatCurrency(dExp)}), a margem líquida real converteu para um percentual de:
             </p>
             
             <div style="margin-top: 3rem; text-align: center; padding: 3rem; border-radius: 12px; background: white; border: 4px solid ${marginCor}; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);">
-               <div style="font-size: 1.5rem; color: var(--text-muted); font-weight: bold; text-transform: uppercase; margin-bottom: 1rem;">Margem Liquida Alcançada</div>
+               <div style="font-size: 1.5rem; color: #64748B; font-weight: bold; text-transform: uppercase; margin-bottom: 1rem;">Margem Liquida Alcançada</div>
                <div style="font-size: 5rem; font-weight: 800; color: ${marginCor};">${cMargin.toFixed(2)}%</div>
                <div style="font-size: 1.5rem; font-weight: 700; margin-top: 1rem; color: ${marginCor};">
                    (${formatCurrency(cLucro)})
@@ -423,16 +502,30 @@ document.getElementById('btn-export-pdf').addEventListener('click', async () => 
       </div>
      `;
 
-     pdfContainer.innerHTML = page1HTML + page2HTML + page3HTML;
+     pdfContainer.innerHTML = page1HTML + page2HTML + page3HTML + page4HTML;
      pdfContainer.style.display = 'block'; // make visible for canvas rendering
+     
+     // Pequena pausa para garantir que o DOM renderizou o novo conteúdo
+     await new Promise(resolve => setTimeout(resolve, 300));
 
      const { jsPDF } = window.jspdf;
      const pdf = new jsPDF('p', 'mm', 'a4');
      
-     const pages = [document.getElementById('pdf-page-1'), document.getElementById('pdf-page-2'), document.getElementById('pdf-page-3')];
+     const pages = [
+       document.getElementById('pdf-page-1'), 
+       document.getElementById('pdf-page-2'), 
+       document.getElementById('pdf-page-3'),
+       document.getElementById('pdf-page-4')
+     ];
      
      for (let i = 0; i < pages.length; i++) {
-       const canvas = await html2canvas(pages[i], { scale: 2, useCORS: true });
+       // Renderizar cada página
+       const canvas = await html2canvas(pages[i], { 
+         scale: 2, 
+         useCORS: true,
+         logging: false,
+         allowTaint: true
+       });
        const imgData = canvas.toDataURL('image/png');
        if (i > 0) pdf.addPage();
        // A4 size: 210 x 297mm

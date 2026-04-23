@@ -166,11 +166,11 @@
           4: Valor Fechado (Obrigatório)
         </h2>
         <div
-          style="background: #faf5ff; border: 1px solid #e9d5ff; border-radius: var(--radius-lg); padding: 2rem; text-align: center;">
-          <div style="font-size: 0.875rem; font-weight: 700; color: #7e22ce; margin-bottom: 1rem;">DEFINA O PREÇO DE
+          style="background: rgba(104, 183, 0, 0.05); border: 1px solid var(--color-green-primary); border-radius: var(--radius-lg); padding: 2rem; text-align: center;">
+          <div style="font-size: 0.875rem; font-weight: 700; color: var(--color-green-dark); margin-bottom: 1rem;">DEFINA O PREÇO DE
             VENDA PRATICADO</div>
           <div class="input-with-symbol" style="max-width: 300px; margin: 0 auto;">
-            <span class="symbol" style="font-size: 1.5rem; font-weight: 800; color: #7e22ce; left: 1.5rem;">R$</span>
+            <span class="symbol" style="font-size: 1.5rem; font-weight: 800; color: var(--color-green-dark); left: 1.5rem;">R$</span>
             <input type="text" id="closed-price" class="form-control" value="0,00"
               style="font-size: 2rem; font-weight: 800; text-align: center; padding: 1rem 1rem 1rem 3.5rem; height: auto;">
           </div>
@@ -195,7 +195,7 @@
               style="font-size: 0.85rem; font-weight: 800; color: var(--color-green-primary); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.5rem;">
               PREÇO DE VENDA SUGERIDO</div>
             <div id="suggested-price"
-              style="font-size: 2.25rem; font-weight: 800; color: white; word-break: break-word;">R$ 0,00</div>
+              style="font-size: 2rem; font-weight: 800; color: white; white-space: nowrap; letter-spacing: -0.02em;">R$ 0,00</div>
           </div>
 
           <!-- Details injected by JS -->
@@ -224,7 +224,7 @@
                 style="font-size: 0.85rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.5rem; opacity: 0.8;">
                 PREÇO PRATICADO</div>
               <div id="closed-price-display"
-                style="font-size: 2.25rem; font-weight: 800; color: inherit; word-break: break-word;">R$ 0,00</div>
+                style="font-size: 2rem; font-weight: 800; color: inherit; white-space: nowrap; letter-spacing: -0.02em;">R$ 0,00</div>
             </div>
 
             <!-- Details injected by JS -->
@@ -246,7 +246,7 @@
   </div>
 
   <!-- Scripts -->
-  <script src="app.js?v=9"></script>
+  <script src="app.js?v=10"></script>
 </body>
 
 </html>

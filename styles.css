@@ -357,10 +357,14 @@ body {
   color: var(--status-green-text);
 }
 
-/* PDF Hidden container */
+/* PDF Hidden container for rendering */
 #pdf-container {
-  display: none;
+  position: fixed;
+  left: -10000px;
+  top: 0;
+  z-index: -1;
   background: white;
+  display: block !important; /* Always block so it can be measured, but hidden by position */
 }
 
 @media print {
@@ -396,7 +400,7 @@ body {
 .pdf-page {
   width: 210mm;
   height: 297mm;
-  padding: 20mm;
+  padding: 15mm;
   background: white;
   box-sizing: border-box;
   page-break-after: always;
