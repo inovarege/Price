@@ -1,4 +1,10 @@
 // Formatar moeda
+const footerHTML = `
+  <div class="pdf-footer" style="position: static; margin: 2rem 0 0; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.1); font-size: 0.75rem; opacity: 0.6; color: inherit;">
+    Desenvolvido por Inovare Gestão Estratégica | com Google Antigravity | para Ambiens Consultoria Ambiental
+  </div>
+`;
+
 function formatCurrency(value) {
   return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
 }
@@ -234,6 +240,7 @@ function calculatePricing() {
             <span>(${new Intl.NumberFormat('pt-BR', { style: 'percent', minimumFractionDigits: 2 }).format(appState.profitMargin/100)})</span>
          </div>
       </div>
+      ${footerHTML}
     </div>
   `;
 
@@ -292,6 +299,7 @@ function calculatePricing() {
               <span>${formatPercentStr(closedMarginPerc)}</span>
            </div>
         </div>
+        ${footerHTML}
       </div>
     `;
   } else {
@@ -367,6 +375,7 @@ document.getElementById('btn-export-pdf').addEventListener('click', async () => 
               </div>
            </div>
         </div>
+        ${footerHTML}
       </div>
      `;
 
@@ -430,6 +439,7 @@ document.getElementById('btn-export-pdf').addEventListener('click', async () => 
                </tr>
             </tbody>
          </table>
+         ${footerHTML}
       </div>
      `;
 
@@ -468,6 +478,7 @@ document.getElementById('btn-export-pdf').addEventListener('click', async () => 
                </tr>
             </tbody>
          </table>
+         ${footerHTML}
       </div>
      `;
 
@@ -497,6 +508,7 @@ document.getElementById('btn-export-pdf').addEventListener('click', async () => 
                </div>
             </div>
          </div>
+         ${footerHTML}
       </div>
      `;
 
