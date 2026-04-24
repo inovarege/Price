@@ -240,7 +240,6 @@ function calculatePricing() {
             <span>(${new Intl.NumberFormat('pt-BR', { style: 'percent', minimumFractionDigits: 2 }).format(appState.profitMargin/100)})</span>
          </div>
       </div>
-      ${footerHTML}
     </div>
   `;
 
@@ -299,7 +298,6 @@ function calculatePricing() {
               <span>${formatPercentStr(closedMarginPerc)}</span>
            </div>
         </div>
-        ${footerHTML}
       </div>
     `;
   } else {
