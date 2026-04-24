@@ -69,7 +69,7 @@ function renderExpenses() {
 
     const accHTML = `
       <div class="accordion ${cat.isOpen ? 'active' : ''}" id="acc-${cat.id}" style="border-left: 4px solid var(--color-green-primary);">
-        <div class="accordion-header" onclick="toggleAccordion(${catIndex})" style="background: rgba(104, 183, 0, 0.08); color: var(--color-green-dark);">
+        <div class="accordion-header" onclick="toggleAccordion(${catIndex})" style="background: rgba(5, 79, 49, 0.08); color: var(--color-green-dark);">
           <div style="display: flex; align-items: center; gap: 0.5rem; font-weight: 700;">
             ${cat.name} 
             <span style="color: var(--color-green-primary); font-size: 1rem; font-weight: 800;">[ ${cat.isOpen ? '-' : '+'} ]</span>
@@ -111,7 +111,7 @@ function renderExpenses() {
 
   // Atualizar total e cor de fundo como a Imagem pede (verde claro sólido com texto verde escuro)
   const totalRow = document.getElementById('total-direct-expenses').parentNode;
-  totalRow.style.background = 'rgba(104, 183, 0, 0.2)';
+  totalRow.style.background = 'rgba(5, 79, 49, 0.2)';
   totalRow.querySelector('span').style.color = 'var(--color-green-dark)';
   document.getElementById('total-direct-expenses').style.color = 'var(--color-green-dark)';
   document.getElementById('total-direct-expenses').textContent = formatCurrency(totalDirect);
@@ -212,7 +212,7 @@ function calculatePricing() {
   const pctVar = suggested > 0 ? (sugVarTotal / suggested) : 0;
 
   document.getElementById('suggested-details').innerHTML = `
-    <div style="color: var(--color-green-primary); font-size: 0.85rem; font-weight: 800; letter-spacing: 0.1em; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem; margin-bottom: 1rem; text-transform: uppercase;">DISTRIBUIÇÃO</div>
+    <div style="color: white; font-size: 0.85rem; font-weight: 800; letter-spacing: 0.1em; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem; margin-bottom: 1rem; text-transform: uppercase;">DISTRIBUIÇÃO</div>
     
     ${renderLine('Custos Diretos Totais', appState.directExpenses, pctDirect, true)}
     ${renderLine('Terceirizados', appState.categoryTotals.terceiros || 0, suggested > 0 ? ((appState.categoryTotals.terceiros || 0) / suggested) : 0, false, true)}
@@ -227,7 +227,7 @@ function calculatePricing() {
     ${renderLine(`Imprevistos (${appState.contRate}%)`, suggested * (appState.contRate/100), appState.contRate/100, false, true)}
 
     <div style="border-top: 1px solid rgba(255,255,255,0.1); margin-top: 1.5rem; padding-top: 1.5rem;">
-      <div style="display: flex; justify-content: space-between; align-items: center; color: var(--color-green-primary); font-weight: 800; font-size: 1.25rem; text-transform: uppercase;">
+      <div style="display: flex; justify-content: space-between; align-items: center; color: white; font-weight: 800; font-size: 1.25rem; text-transform: uppercase;">
          <span>LUCRO PREVISTO</span>
          <div>
             <span style="margin-right: 0.5rem;">${formatCurrency(sugLucro)}</span>
@@ -265,8 +265,6 @@ function calculatePricing() {
     } else {
       statusCard.classList.add('status-green');
     }
-    
-    document.getElementById('closed-margin-display').textContent = new Intl.NumberFormat('pt-BR', { style: 'percent', minimumFractionDigits: 2 }).format(closedMarginPerc);
     
     const cpctDirect = closed > 0 ? (appState.directExpenses / closed) : 0;
     const cpctVar = closed > 0 ? (closedVarTotal / closed) : 0;
@@ -386,13 +384,13 @@ document.getElementById('btn-export-pdf').addEventListener('click', async () => 
                max-width: 160px;
             }
          </style>
-         <h2 style="color: #5D812C; font-size: 1.8rem; border-bottom: 2px solid #68B700; padding-bottom: 0.5rem; margin-bottom: 1.5rem;">Detalhamento Financeiro</h2>
+         <h2 style="color: #054F31; font-size: 1.8rem; border-bottom: 2px solid #054F31; padding-bottom: 0.5rem; margin-bottom: 1.5rem;">Detalhamento Financeiro</h2>
          
          <div style="display: flex; gap: 1rem;">
             <!-- Fechado -->
             <div style="flex: 1; padding: 1.2rem; border: 2px solid #F2DE2B; border-radius: 12px; background: #fffdf5; display: flex; flex-direction: column;">
-               <h3 style="color: #274C77; text-align: center; margin-bottom: 0.5rem; font-size: 1rem;">Cenário Fechado</h3>
-               <div style="text-align: center; font-size: ${getPriceFontSize(cPrice)}; font-weight: 800; color: #274C77; margin-bottom: 1.5rem; letter-spacing: -0.02em;">${formatCurrency(cPrice)}</div>
+               <h3 style="color: #054F31; text-align: center; margin-bottom: 0.5rem; font-size: 1rem;">Cenário Fechado</h3>
+               <div style="text-align: center; font-size: ${getPriceFontSize(cPrice)}; font-weight: 800; color: #054F31; margin-bottom: 1.5rem; letter-spacing: -0.02em;">${formatCurrency(cPrice)}</div>
                
                <div class="pdf-details-row" style="font-size: 0.8rem;">
                   ${document.getElementById('closed-details').innerHTML || '<p style="text-align:center; color:#888;">Nenhum dado informado</p>'}
@@ -401,8 +399,8 @@ document.getElementById('btn-export-pdf').addEventListener('click', async () => 
             
             <!-- Sugerido -->
             <div style="flex: 1; padding: 1.2rem; border: 2px solid #6096BA; border-radius: 12px; background: #f0f7f9; display: flex; flex-direction: column;">
-               <h3 style="color: #274C77; text-align: center; margin-bottom: 0.5rem; font-size: 1rem;">Cenário Sugerido</h3>
-               <div style="text-align: center; font-size: ${getPriceFontSize(sPrice)}; font-weight: 800; color: #274C77; margin-bottom: 1.5rem; letter-spacing: -0.02em;">${formatCurrency(sPrice)}</div>
+               <h3 style="color: #054F31; text-align: center; margin-bottom: 0.5rem; font-size: 1rem;">Cenário Sugerido</h3>
+               <div style="text-align: center; font-size: ${getPriceFontSize(sPrice)}; font-weight: 800; color: #054F31; margin-bottom: 1.5rem; letter-spacing: -0.02em;">${formatCurrency(sPrice)}</div>
                
                <div class="pdf-details-row" style="font-size: 0.8rem;">
                   ${document.getElementById('suggested-details').innerHTML}
@@ -410,10 +408,10 @@ document.getElementById('btn-export-pdf').addEventListener('click', async () => 
             </div>
          </div>
          
-         <h3 style="margin-top: 2rem; color: #274C77; font-size: 1.2rem;">Base de Despesas Diretas Reais</h3>
+         <h3 style="margin-top: 2rem; color: #054F31; font-size: 1.2rem;">Base de Despesas Diretas Reais</h3>
          <table style="width: 100%; border-collapse: collapse; margin-top: 0.8rem; font-size: 0.85rem;">
             <thead>
-               <tr style="background: #68B700; color: white;">
+               <tr style="background: #054F31; color: white;">
                   <th style="padding: 0.6rem; text-align: left;">Categoria</th>
                   <th style="padding: 0.6rem; text-align: right;">Total R$</th>
                </tr>
@@ -426,9 +424,9 @@ document.getElementById('btn-export-pdf').addEventListener('click', async () => 
                     <td style="padding: 0.6rem; text-align: right; font-weight: 600;">${formatCurrency(t)}</td>
                  </tr>`;
                }).join('')}
-               <tr style="background: #f8fafc; border-top: 2px solid #68B700;">
-                  <td style="padding: 0.6rem; font-weight: bold; color: #5D812C;">TOTAL DESPESAS DIRETAS</td>
-                  <td style="padding: 0.6rem; text-align: right; font-weight: 800; color: #5D812C; font-size: 1rem;">${formatCurrency(dExp)}</td>
+               <tr style="background: #f8fafc; border-top: 2px solid #054F31;">
+                  <td style="padding: 0.6rem; font-weight: bold; color: #054F31;">TOTAL DESPESAS DIRETAS</td>
+                  <td style="padding: 0.6rem; text-align: right; font-weight: 800; color: #054F31; font-size: 1rem;">${formatCurrency(dExp)}</td>
                </tr>
             </tbody>
          </table>
@@ -438,12 +436,12 @@ document.getElementById('btn-export-pdf').addEventListener('click', async () => 
      // Pg 3 - Detalhamento de Itens
      const page3HTML = `
       <div class="pdf-page" id="pdf-page-3">
-         <h2 style="color: #5D812C; font-size: 1.8rem; border-bottom: 2px solid #68B700; padding-bottom: 0.5rem; margin-bottom: 1.5rem;">Detalhamento de Itens</h2>
+         <h2 style="color: #054F31; font-size: 1.8rem; border-bottom: 2px solid #054F31; padding-bottom: 0.5rem; margin-bottom: 1.5rem;">Detalhamento de Itens</h2>
          <p style="margin-bottom: 1.5rem; color: #64748B;">Listagem completa de todos os custos diretos previstos para o projeto.</p>
          
          <table style="width: 100%; border-collapse: collapse; font-size: 0.8rem;">
             <thead>
-               <tr style="background: #274C77; color: white;">
+               <tr style="background: #054F31; color: white;">
                   <th style="padding: 0.6rem; text-align: left;">Item / Descrição</th>
                   <th style="padding: 0.6rem; text-align: center; width: 60px;">Qtd</th>
                   <th style="padding: 0.6rem; text-align: right; width: 120px;">V. Unitário</th>
@@ -452,8 +450,8 @@ document.getElementById('btn-export-pdf').addEventListener('click', async () => 
             </thead>
             <tbody>
                ${expenseCategories.map(cat => `
-                  <tr style="background: rgba(104, 183, 0, 0.1); font-weight: bold;">
-                     <td colspan="4" style="padding: 0.6rem; color: #5D812C; border-top: 1px solid #ccc;">${cat.name}</td>
+                  <tr style="background: rgba(5, 79, 49, 0.1); font-weight: bold;">
+                     <td colspan="4" style="padding: 0.6rem; color: #054F31; border-top: 1px solid #ccc;">${cat.name}</td>
                   </tr>
                   ${cat.items.map(item => `
                      <tr style="border-bottom: 1px solid #eee;">
@@ -464,9 +462,9 @@ document.getElementById('btn-export-pdf').addEventListener('click', async () => 
                      </tr>
                   `).join('')}
                `).join('')}
-               <tr style="background: #f8fafc; border-top: 2px solid #68B700;">
-                  <td colspan="3" style="padding: 0.8rem; font-weight: bold; color: #5D812C; text-align: right;">TOTAL GERAL DE DESPESAS DIRETAS</td>
-                  <td style="padding: 0.8rem; text-align: right; font-weight: 800; color: #5D812C; font-size: 1.1rem;">${formatCurrency(dExp)}</td>
+               <tr style="background: #f8fafc; border-top: 2px solid #054F31;">
+                  <td colspan="3" style="padding: 0.8rem; font-weight: bold; color: #054F31; text-align: right;">TOTAL GERAL DE DESPESAS DIRETAS</td>
+                  <td style="padding: 0.8rem; text-align: right; font-weight: 800; color: #054F31; font-size: 1.1rem;">${formatCurrency(dExp)}</td>
                </tr>
             </tbody>
          </table>
@@ -480,7 +478,7 @@ document.getElementById('btn-export-pdf').addEventListener('click', async () => 
      
      const page4HTML = `
       <div class="pdf-page" id="pdf-page-4">
-         <h2 style="color: #5D812C; font-size: 2rem; border-bottom: 2px solid #68B700; padding-bottom: 0.5rem; margin-bottom: 2rem;">Análise Comparativa</h2>
+         <h2 style="color: #054F31; font-size: 2rem; border-bottom: 2px solid #054F31; padding-bottom: 0.5rem; margin-bottom: 2rem;">Análise Comparativa</h2>
          
          <div style="padding: 2rem; border-radius: 12px; background: #f8fafc; border: 1px solid #e2e8f0;">
             <p style="font-size: 1.25rem; line-height: 1.8; color: #2C3E50;">

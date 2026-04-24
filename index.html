@@ -9,7 +9,7 @@
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
 
   <!-- Icons & PDF Libraries -->
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -17,7 +17,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
   <!-- Styles -->
-  <link rel="stylesheet" href="styles.css?v=9">
+  <link rel="stylesheet" href="styles.css?v=11">
 </head>
 
 <body>
@@ -166,7 +166,7 @@
           4: Valor Fechado (Obrigatório)
         </h2>
         <div
-          style="background: rgba(104, 183, 0, 0.05); border: 1px solid var(--color-green-primary); border-radius: var(--radius-lg); padding: 2rem; text-align: center;">
+          style="background: rgba(5, 79, 49, 0.05); border: 1px solid var(--color-primary); border-radius: var(--radius-lg); padding: 2rem; text-align: center;">
           <div style="font-size: 0.875rem; font-weight: 700; color: var(--color-green-dark); margin-bottom: 1rem;">DEFINA O PREÇO DE
             VENDA PRATICADO</div>
           <div class="input-with-symbol" style="max-width: 300px; margin: 0 auto;">
@@ -183,8 +183,8 @@
     <aside class="sticky-panel">
       <!-- Suggested Price Card -->
       <div class="summary-card" id="card-suggested"
-        style="background: var(--color-green-dark); box-shadow: 0 10px 25px -5px rgba(93, 129, 44, 0.4);">
-        <div class="summary-card-header" style="text-align: left; padding: 2rem 2rem 1rem;">
+        style="background: linear-gradient(135deg, var(--color-primary), var(--color-secondary)); box-shadow: 0 10px 25px -5px rgba(5, 79, 49, 0.4);">
+        <div class="summary-card-header suggested" style="text-align: left; padding: 2rem 2rem 1rem;">
           <h2 style="font-size: 1.15rem; font-weight: 800; color: white;">ANÁLISE - PREÇO SUGERIDO</h2>
         </div>
         <div class="summary-card-body" style="color: white; padding: 0 2rem 2rem;">
@@ -192,7 +192,7 @@
           <div
             style="background: rgba(0,0,0,0.2); border-radius: var(--radius-lg); padding: 1.5rem; text-align: center; margin-bottom: 2rem;">
             <div
-              style="font-size: 0.85rem; font-weight: 800; color: var(--color-green-primary); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.5rem;">
+              style="font-size: 0.85rem; font-weight: 800; color: white; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.5rem;">
               PREÇO DE VENDA SUGERIDO</div>
             <div id="suggested-price"
               style="font-size: 2rem; font-weight: 800; color: white; white-space: nowrap; letter-spacing: -0.02em;">R$ 0,00</div>
@@ -206,15 +206,8 @@
       <!-- Closed Price Card -->
       <div class="summary-card hidden" id="card-closed" style="box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);">
         <div class="margin-status-card" id="closed-status-card" style="padding: 0; border: none; text-align: left;">
-          <div class="summary-card-header" style="padding: 2rem 2rem 1rem;">
-            <div
-              style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
-              <h2 style="font-size: 1.15rem; font-weight: 800; color: inherit; max-width: 65%;">ANÁLISE - PREÇO FECHADO
-              </h2>
-              <div id="closed-margin-display"
-                style="font-weight: 800; font-size: 0.8rem; text-transform: uppercase; padding: 0.3rem 0.5rem; border-radius: 4px; border: 1px solid currentColor;">
-                0,00%</div>
-            </div>
+          <div class="summary-card-header" style="text-align: left; padding: 2rem 2rem 1rem;">
+            <h2 style="font-size: 1.15rem; font-weight: 800; color: inherit;">ANÁLISE - PREÇO FECHADO</h2>
           </div>
           <div class="summary-card-body" style="padding: 0 2rem 2rem;">
 
@@ -246,7 +239,7 @@
   </div>
 
   <!-- Scripts -->
-  <script src="app.js?v=10"></script>
+  <script src="app.js?v=11"></script>
 </body>
 
 </html>
